@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>||VEDALINGO||</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("Images/Old-book-696x397.jpg") no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #ffa500;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .hero {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 40%;
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-decoration: none;
+            background: #ffa500;
+            color: black;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .features {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-height: 40%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            height: 100%;
+        }
+
+        .feature-card {
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #ffa500;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .nav {
+                margin-top: 10px;
+            }
+
+            body {
+                height: auto;
+                overflow: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>|| VEDALINGO ||</h1>
+        <div class="nav">
+            <a href="index.html">HOME</a>
+            <a href="readvedas.html">READ_VEDAS</a>
+            <a href="translate.html">TRANSLATE</a>
+            <a href="pronounciator.html">PRONOUNCIATOR</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero">
+            <h2>Explore Ancient Wisdom</h2>
+            <p>Discover the timeless knowledge of Vedic texts through modern technology. Read, translate, and learn proper pronunciation of sacred Sanskrit verses.</p>
+            <div class="cta-buttons">
+                <a href="readvedas.html" class="cta-button">Explore Vedas</a>
+                <a href="translate.html" class="cta-button">Translate verses</a>
+                <a href="pronounciator.html" class="cta-button">Learn pronunciation</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Read Vedas</h3>
+                    <p>Access all four Vedas with original Sanskrit texts and detailed explanations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Translation Tool</h3>
+                    <p>Accurate translations from Sanskrit to multiple modern languages.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗣️</div>
+                    <h3>Pronunciation Guide</h3>
+                    <p>Learn correct Sanskrit pronunciation with our interactive pronounciator.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Access Vedalingo anywhere, anytime on any device.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

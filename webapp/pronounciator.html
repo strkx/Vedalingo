@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>||VEDALINGO|| PRONOUNCIATOR</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("Images/Old-book-696x397.jpg") no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #ffa500;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .pronounce-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .pronounce-container h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: calc(100% - 20px);
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            resize: none;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .pronounce-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            background: #ffa500;
+            color: black;
+        }
+
+        .pronounce-button:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .pronounce-container {
+                width: 90%;
+            }
+
+            .pronounce-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>|| VEDALINGO ||</h1>
+        <div class="nav">
+            <a href="index.html">HOME</a>
+            <a href="readvedas.html">READ_VEDAS</a>
+            <a href="translate.html">TRANSLATE</a>
+            <a href="pronounciator.html">PRONOUNCIATOR</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="pronounce-container">
+            <h2>Pronounce Sanskrit Text</h2>
+            <textarea id="sanskritInput" placeholder="Enter Sanskrit text here..."></textarea>
+            <button class="pronounce-button" onclick="pronounceText()">Pronounce</button>
+        </div>
+    </div>
+
+    <script>
+        function pronounceText() {
+            const text = document.getElementById("sanskritInput").value.trim();
+            if (text === "") {
+                alert("Please enter Sanskrit text to pronounce.");
+                return;
+            }
+
+            const synth = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            // Set language (Closest available for Sanskrit)
+            utterance.lang = "hi-IN";
+
+            // Set rate and pitch for better pronunciation
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+
+            // Ensure voices are loaded before speaking
+            synth.onvoiceschanged = function () {
+                const voices = synth.getVoices();
+                const hindiVoice = voices.find(voice => voice.lang === "hi-IN") || voices[0];
+                utterance.voice = hindiVoice;
+                synth.speak(utterance);
+            };
+
+            // If voices are already loaded, speak immediately
+            if (synth.getVoices().length > 0) {
+                const voices = synth.getVoices();
+                const hindiVoice = voices.find(voice => voice.lang === "hi-IN") || voices[0];
+                utterance.voice = hindiVoice;
+                synth.speak(utterance);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>|| VEDALINGO || TRANSLATE</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("Images/Old-book-696x397.jpg") no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #ffa500;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .translator-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .translator-container h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: calc(100% - 20px);
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            resize: none;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .translation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .translation-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            background: #ffa500;
+            color: black;
+        }
+
+        .translation-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .output-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .output-container h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .output-container p {
+            font-size: 1em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .translator-container {
+                width: 90%;
+            }
+
+            .translation-buttons {
+                flex-direction: column;
+            }
+
+            .translation-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>|| VEDALINGO ||</h1>
+        <div class="nav">
+            <a href="index.html">HOME</a>
+            <a href="readvedas.html">READ_VEDAS</a>
+            <a href="translate.html">TRANSLATE</a>
+            <a href="pronounciator.html">PRONOUNCIATOR</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="translator-container">
+            <h2>Translate Sanskrit Texts</h2>
+            <textarea id="sanskritInput" placeholder="Enter Sanskrit text here..."></textarea>
+            <div class="translation-buttons">
+                <button onclick="translateToEnglish()">Translate to English</button>
+                <button onclick="translateToHindi()">Translate to Hindi</button>
+                <button onclick="translateContextual()">Contextual Translation</button>
+            </div>
+            <div class="output-container">
+                <h3>Translation:</h3>
+                <p id="translationOutput">Your translated text will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiBaseUrl = "http://127.0.0.1:8000";
+
+        async function fetchTranslation(endpoint, inputText) {
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: inputText })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('translationOutput').innerText = data.translation;
+                } else {
+                    document.getElementById('translationOutput').innerText = "Error: Unable to translate.";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('translationOutput').innerText = "Error: Connection to backend failed.";
+            }
+        }
+
+        // Sanskrit to English Translation using Swami Tucat's Model
+        function translateToEnglish() {
+            const inputText = document.getElementById('sanskritInput').value;
+            if (!inputText) {
+                alert("Please enter Sanskrit text for translation.");
+                return;
+            }
+            fetchTranslation(`${apiBaseUrl}/translate/swami/eng`, inputText);
+        }
+
+        // Sanskrit to Hindi Translation using GROQ
+        function translateToHindi() {
+            const inputText = document.getElementById('sanskritInput').value;
+            if (!inputText) {
+                alert("Please enter Sanskrit text for translation.");
+                return;
+            }
+            fetchTranslation(`${apiBaseUrl}/translate/groq/hindi`, inputText);
+        }
+
+        // Contextual Sanskrit to English Translation using GROQ
+        function translateContextual() {
+            const inputText = document.getElementById('sanskritInput').value;
+            if (!inputText) {
+                alert("Please enter Sanskrit text for translation.");
+                return;
+            }
+            fetchTranslation(`${apiBaseUrl}/translate/groq/english`, inputText);
+        }
+    </script>
+</body>
+</html>

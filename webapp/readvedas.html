@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>||VEDALINGO||</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("Images/Old-book-696x397.jpg") no-repeat center center/cover;
+            color: white;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 40px;
+        }
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 250px;
+            margin: 20px;
+            padding: 15px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .card h2 {
+            font-size: 22px;
+            margin: 10px 0;
+        }
+        .card p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>|| VEDALINGO ||</h1>
+        <div class="nav">
+            <a href="index.html">HOME</a>
+            <a href="readvedas.html">READ_VEDAS</a>
+            <a href="translate.html">TRANSLATE</a>
+            <a href="pronounciator.html">PRONOUNCIATOR</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" onclick="window.location.href='rigveda.html'">
+            <img src="Images/RIGVEDA.jpg" alt="Rigveda">
+            <h2>ऋग्वेद</h2>
+            <p>Rigveda is the oldest of the four Vedas, composed around 1500 BCE...</p>
+        </div>
+        <div class="card" onclick="window.location.href='yajurveda.html'">
+            <img src="Images/YAJURVEDA.jpeg" alt="Yajurveda">
+            <h2>यजुर्वेद</h2>
+            <p>The Yajurveda is the Veda of rituals and sacrifices...</p>
+        </div>
+        <div class="card" onclick="window.location.href='atharvaveda.html'">
+            <img src="Images/atharvaveda.jpeg" alt="Atharvaveda">
+            <h2>अथर्ववेद</h2>
+            <p>The Atharvaveda is the Veda of everyday life...</p>
+        </div>
+        <div class="card" onclick="window.location.href='samaveda.html'">
+            <img src="Images/Samveda.jpg" alt="Samaveda">
+            <h2>सामवेद</h2>
+            <p>The Samaveda is the Veda of melodies and chants...</p>
+        </div>
+    </div>
+</body>
+</html>

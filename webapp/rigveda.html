@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rigveda - VEDALINGO</title>
+    <style>
+        /* General Styles */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url("Images/Old-book-696x397.jpg") no-repeat center center/cover;
+            color: white;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            flex-wrap: wrap;
+        }
+
+        .book-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 200px;
+            margin: 20px;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+
+        .sukta-list {
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .sukta-list a {
+            display: block;
+            color: white;
+            padding: 5px 0;
+            text-decoration: none;
+        }
+
+        .sukta-list a:hover {
+            color: #ffa500;
+        }
+
+        .verse-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+        }
+
+        .verse {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #444;
+            position: relative;
+        }
+
+        .sanskrit {
+            font-family: 'Devanagari', serif;
+            font-size: 1.4em;
+            color: #ffa500;
+        }
+
+        .translation {
+            font-size: 1.1em;
+            color: #dcdcdc;
+            margin-top: 10px;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #ffa500;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .loading {
+            color: #ffa500;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .error {
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>|| VEDALINGO ||</h1>
+        <div class="nav">
+            <a href="index.html">HOME</a>
+            <a href="readvedas.html">READ_VEDAS</a>
+            <a href="translate.html">TRANSLATE</a>
+            <a href="pronounciator.html">PRONOUNCIATOR</a>
+        </div>
+    </div>
+
+    <div class="container" id="book-container">
+        <!-- Book cards will be generated here dynamically -->
+    </div>
+
+    <div id="verse-container" class="verse-container"></div>
+
+    <script>
+        // Function to dynamically load book cards
+        function loadBooks() {
+            const bookContainer = document.getElementById('book-container');
+            for (let i = 1; i <= 10; i++) {
+                const bookCard = document.createElement('div');
+                bookCard.classList.add('book-card');
+                bookCard.innerHTML = `
+                    <h2>Book ${i}</h2>
+                    <div id="book${i}" class="sukta-list"></div>
+                `;
+                bookCard.onclick = () => loadSuktas(i, `book${i}`);
+                bookContainer.appendChild(bookCard);
+            }
+        }
+
+        // Load books when the page loads
+        window.onload = loadBooks;
+
+        // Function to load Suktas when a book is clicked
+        async function loadSuktas(bookNumber, containerId) {
+            const suktaList = document.getElementById(containerId);
+            suktaList.innerHTML = '<p class="loading">Loading Suktas...</p>';
+            suktaList.style.display = 'block';
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8001/api/vedas/${bookNumber}/sukta-count`);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch Sukta count. Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const count = parseInt(data.sukta_count, 10);
+
+                if (isNaN(count) || count < 1) {
+                    throw new Error("Invalid data format: 'sukta_count' is not a valid number.");
+                }
+
+                suktaList.innerHTML = '';
+                for (let i = 1; i <= count; i++) {
+                    const suktaItem = document.createElement('a');
+                    suktaItem.innerText = `Sukta ${i}`;
+                    suktaItem.href = "#";
+                    suktaItem.onclick = (event) => {
+                        event.preventDefault();
+                        fetchSukta(bookNumber, i);
+                    };
+                    suktaList.appendChild(suktaItem);
+                }
+            } catch (error) {
+                suktaList.innerHTML = `<p class="error">Failed to load Suktas. ${error.message}</p>`;
+            }
+        }
+
+        // Function to fetch and display verses
+        // Function to fetch and display verses
+async function fetchSukta(bookNumber, suktaNumber) {
+    const verseContainer = document.getElementById('verse-container');
+    verseContainer.innerHTML = '<p class="loading">Loading verses...</p>';
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8001/api/vedas/${bookNumber}/hymn${suktaNumber}`
+        );
+        const hymnData = await response.json();
+        verseContainer.innerHTML = hymnData.verses.map((verse, index) => `
+            <div class="verse">
+                <div class="sanskrit">${verse.sanskrit}</div>
+                <div class="translation">Verse ${index + 1}: ${verse.translation}</div>
+                <button class="play-button" data-sanskrit="${verse.sanskrit}" data-translation="${verse.translation}">
+                    🔊 Play
+                </button>
+            </div>
+        `).join('');
+
+        // Bind Play Buttons after rendering
+        const playButtons = document.querySelectorAll('.play-button');
+        playButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const sanskrit = this.getAttribute('data-sanskrit');
+                const translation = this.getAttribute('data-translation');
+                pronounceVerse(sanskrit, translation);
+            });
+        });
+    } catch (error) {
+        console.error('Fetch error:', error);
+        verseContainer.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+    }
+}
+
+
+        // Function to Pronounce the Verse
+        // Function to Pronounce the Verse
+function pronounceVerse(sanskritText, translationText) {
+    const synth = window.speechSynthesis;
+
+    // Create Utterances
+    const sanskritUtterance = new SpeechSynthesisUtterance(sanskritText);
+    sanskritUtterance.lang = "hi-IN";
+    sanskritUtterance.rate = 0.9;
+    sanskritUtterance.pitch = 1;
+
+    const englishUtterance = new SpeechSynthesisUtterance(translationText);
+    englishUtterance.lang = "en-US";
+    englishUtterance.rate = 1;
+    englishUtterance.pitch = 1;
+
+    // Chain the pronunciation
+    sanskritUtterance.onend = () => {
+        synth.speak(englishUtterance);
+    };
+
+    // Wait for voices to load
+    const loadVoicesAndSpeak = () => {
+        const voices = synth.getVoices();
+        if (voices.length === 0) {
+            console.warn("No voices available. Trying again...");
+            setTimeout(loadVoicesAndSpeak, 100);
+            return;
+        }
+
+        const hindiVoice = voices.find(voice => voice.lang === "hi-IN") || voices[0];
+        sanskritUtterance.voice = hindiVoice;
+
+        const englishVoice = voices.find(voice => voice.lang.startsWith("en")) || voices[0];
+        englishUtterance.voice = englishVoice;
+
+        synth.speak(sanskritUtterance);
+    };
+
+    // Trigger the voice loading and speaking
+    loadVoicesAndSpeak();
+}
+
+    </script>
+</body>
+</html>
